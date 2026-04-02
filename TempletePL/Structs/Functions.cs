@@ -1,5 +1,6 @@
 ﻿using TempletePL.Expressions;
 using TempletePL.FunctionsStructs;
+using TempletePL.FunctionsStructs.MathLibrary;
 using TempletePL.FunctionsStucts;
 using TempletePL.Statements;
 using TempletePL.Types;
@@ -17,6 +18,12 @@ namespace TempletePL.Structs
             SystemFunction.Add("cin");
             SystemFunction.Add("clear");
             SystemFunction.Add("readkey");
+
+            // Math
+            SystemFunction.Add("sin");
+            SystemFunction.Add("cos");
+            SystemFunction.Add("sqrt");
+            SystemFunction.Add("fib");
         }
 
         public static Function GetFunction(string key)
@@ -44,6 +51,10 @@ namespace TempletePL.Structs
                 case "cin": return new CinFunction();
                 case "clear": return new ClearFucntion();
                 case "readkey": return new KeyFunction();
+                case "sin": return new SinFunction();
+                case "cos": return new CosFunction();
+                case "sqrt": return new SqrtFunction();
+                case "fib": return new FibFunction();
             }
             return new FunctionStatement(
                 new List<VariableDeclarationStatement>(((FunctionStatement)FunctionsMap[key]).arguments),

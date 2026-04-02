@@ -21,7 +21,7 @@ namespace TempletePL.Types
 
         public string GetString()
         {
-            return ((int)value).ToString();
+            return Convert.ToString(value);
         }
 
         public bool GetBool()
