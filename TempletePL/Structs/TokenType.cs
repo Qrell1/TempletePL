@@ -15,6 +15,8 @@ namespace TempletePL.Structs
         RPAR,
         LFIG,
         RFIG,
+        LB,
+        RB,
         END,
         THEN,
         VARDECL,
@@ -71,6 +73,8 @@ namespace TempletePL.Structs
             {TokenType.RPAR, "\\)"},
             {TokenType.LFIG, "\\{"},
             {TokenType.RFIG, "\\}"},
+            {TokenType.LB, "\\["},
+            {TokenType.RB, "\\]"},
             {TokenType.PS, "\\,"},
             {TokenType.TS, "\\."}
         };

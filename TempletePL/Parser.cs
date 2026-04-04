@@ -88,6 +88,14 @@ namespace TempletePL
             {
                 ParseFunction();
             }
+            if (peek(TokenType.LB))
+            {
+                return ParseArrayDeclarationStatement();
+            }
+            if (peek(TokenType.VAR) && tokens[pos + 1].type == TokenType.LB)
+            {
+                return ParseArrayAssignIndexStatement();
+            }
             if (peek(TokenType.VAR) && tokens[pos + 1].type == TokenType.LPAR)
             {
                 return ParseCallStatement();
@@ -252,6 +260,20 @@ namespace TempletePL
 
             return new VariableDeclarationStatement(variableToken.value, expr);
         }
+        private Statement ParseArrayDeclarationStatement()
+        {
+            skip();
+            Expression expr = parseFormula();
+            except(TokenType.RB); skip(); except(TokenType.VAR);
+            return new ArrayDeclarationStatement(take().value, expr);
+        }
+        private Statement ParseArrayAssignIndexStatement()
+        {
+            Token variable = take(); skip();
+            Expression expr = parseFormula();
+            except(TokenType.RB); skip(); except(TokenType.OPER, "="); skip();
+            return new ArrayAssignStatement(variable.value, expr, parseFormula());
+        }
         private Statement ParseAssignStatement()
         {
             Token variableToken = take();
@@ -334,13 +356,20 @@ namespace TempletePL
         {
             Token token = take();
 
+            if (token.type == TokenType.VAR && peek(TokenType.LB))
+            {
+                skip();
+                ArrayExpression expr = new ArrayExpression(token.value, parseFormula()); except(TokenType.RB);
+                skip();
+                return expr;
+            }
             if (token.type == TokenType.VAR && peek(TokenType.LPAR)) return new CallExpression(ParseFormulaSignature().ToArray(), token.value);
             if (token.type == TokenType.SUFIX && peek(TokenType.VAR)) return new SufixExpression(take().value, token, false);
             if (token.type == TokenType.VAR && peek(TokenType.SUFIX)) return new SufixExpression(token.value, take(), true);
             if (token.type == TokenType.VAR) return new VariableExpression(token.value);
             if (token.type == TokenType.OPER && (token.value == "+" || token.value == "-")) return new UnaryExpression(parseFormula(), token);
             if (token.type == TokenType.NUMBER) return new NumberExpression(Convert.ToDouble(token.value));
-            if (token.type == TokenType.STRING) return new ValueExpression(new StringValue(token.value.Replace("\\n", "\n").Replace("\\t", "\t")));
+            if (token.type == TokenType.STRING) return new StringExpression(token.value.Replace("\\n", "\n").Replace("\\t", "\t"));
             //if (token.type.type == "CHAR") return new CommonNode("CHAR", token);
             if (token.type == TokenType.BOOL) return new BoolExpression((token.value == "true") ? true : false);
             if (token.type == TokenType.FLOAT) return new NumberExpression(Convert.ToDouble(token.value.Replace(".",",").Replace("f","")));

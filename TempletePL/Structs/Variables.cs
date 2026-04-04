@@ -6,6 +6,7 @@ namespace TempletePL.Structs
     { 
         public static Stack<Dictionary<string, Value>> VariablesMap = new Stack<Dictionary<string, Value>>();
         public static Dictionary<string, Value> ConstantsMap = new Dictionary<string, Value>();
+        public static Stack<Dictionary<string, Value[]>> ArrayMap = new Stack<Dictionary<string, Value[]>>();
 
         static Variables ()
         {
@@ -14,6 +15,7 @@ namespace TempletePL.Structs
             ConstantsMap.Add("E", new NumberValue(Math.E));
             ConstantsMap.Add("e", new NumberValue(Math.E));
             VariablesMap.Push(new Dictionary<string, Value>());
+            ArrayMap.Push(new Dictionary<string, Value[]>());
             foreach (var key in ConstantsMap) VariablesMap.Peek().Add(key.Key, key.Value);
         }
 
@@ -21,6 +23,7 @@ namespace TempletePL.Structs
         {
             VariablesMap.Clear();
             VariablesMap.Push(new Dictionary<string, Value>());
+            ArrayMap.Push(new Dictionary<string, Value[]>());
             foreach (var key in ConstantsMap) VariablesMap.Peek().Add(key.Key, key.Value);
         }
 
@@ -46,10 +49,12 @@ namespace TempletePL.Structs
         public static void OpenSpace()
         {
             VariablesMap.Push(new Dictionary<string, Value>());
+            ArrayMap.Push(new Dictionary<string, Value[]>());
         }
         public static void CloseSpace()
         {
             VariablesMap.Pop();
+            ArrayMap.Pop();
         }
     }
 }
