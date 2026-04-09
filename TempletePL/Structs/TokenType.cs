@@ -32,6 +32,7 @@ namespace TempletePL.Structs
         DO,
         WHILE,
         FOR,
+        REPT,
 
         BREAK,
         CONTINUE,
@@ -59,6 +60,7 @@ namespace TempletePL.Structs
             {TokenType.DO, @"\bdo\b"},
             {TokenType.WHILE, @"\bwhile\b"},
             {TokenType.FOR, @"\bfor\b"},
+            {TokenType.REPT, @"\brept\b"},
             {TokenType.THEN, @"\bthen\b"},
             {TokenType.END, @"\bend\b"},
             {TokenType.BOOL, @"(\btrue\b|\bfalse\b)"},

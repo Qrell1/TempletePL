@@ -132,6 +132,10 @@ namespace TempletePL
             {
                 return ParseForStatement();
             }
+            if (peek(TokenType.REPT))
+            {
+                return ParseReptStatement();
+            }
             if (peek(TokenType.BREAK))
             {
                 return ParseBreakStatement();
@@ -211,6 +215,14 @@ namespace TempletePL
             Expression conditionExpression = parseCmp(); cmp = false;
             List<Statement> statements = ParseBody();
             return new WhileStatement(conditionExpression, statements);
+        }
+        private Statement ParseReptStatement()
+        {
+            skip();
+
+            Expression expr = parseFormula();
+            List<Statement> statements = ParseBody();
+            return new ReptStatement(expr, statements);
         }
 
         private Statement ParseIfStatement()
